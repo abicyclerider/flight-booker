@@ -15,3 +15,22 @@
 <hr>
   <%= submit_tag "Search" %>
 <% end %>
+<hr>
+<% if @flights.any? %>
+  <h2>Available Flights:</h2>
+  <%= form_with url: new_booking_path, method: :get do |form| %>
+    <% @flights.each do |flight| %>
+      <div>
+        <%= radio_button_tag :flight_id, flight.id %>
+        <%= label_tag "flight_id_#{flight.id}" do %>
+          <%= flight.departure_airport.code %> → <%= flight.arrival_airport.code %> | 
+          <%= flight.start_time.strftime("%B %d, %Y at %I:%M %p") %> | 
+          Duration: <%= flight.duration %> minutes
+        <% end %>
+      </div>
+    <% end %>
+    
+    <%= hidden_field_tag :num_passengers, params[:num_passengers] %>
+    <%= submit_tag "Book Flight" %>
+  <% end %>
+<% end %>
